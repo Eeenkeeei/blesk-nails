@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         content: {
             flexGrow: 1,
-            padding: theme.spacing(3),
+            padding: 0,
             transition: theme.transitions.create('margin', {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.leavingScreen,
@@ -86,7 +86,6 @@ export const MainPage = () => {
     };
 
     const classes = useStyles();
-    // const theme = useTheme();
 
     return (
         <Switch>
@@ -108,11 +107,16 @@ export const MainPage = () => {
                             >
                                 <Icon>menu</Icon>
                             </IconButton>
-                            <Typography variant="h6" noWrap>
+                            <Typography variant="h6" noWrap style={{fontSize: '1.2rem'}}>
                                 Ноготочки
+                            </Typography>
+                            &nbsp;&nbsp;
+                            <Typography variant="h6" noWrap style={{marginLeft: 'auto', fontSize: '1.2rem'}}>
+                                {new Date().toLocaleDateString('ru')}
                             </Typography>
                         </Toolbar>
                     </AppBar>
+
                     <Drawer
                         className={classes.drawer}
                         variant="persistent"
