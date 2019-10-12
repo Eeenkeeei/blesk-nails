@@ -12,7 +12,7 @@ export const theme = createMuiTheme({
         },
         "primary": {
             "light": "#40c4ff",
-            "main": "rgba(38,57,139,0.7)",
+            "main": "rgb(122,117,160)",
             "dark": "rgba(74, 144, 226, 1)",
             "contrastText": "#fbfdff"
         },

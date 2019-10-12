@@ -11,6 +11,7 @@ import {
     Typography
 } from "@material-ui/core";
 import isMobile from 'ismobilejs';
+import DayListComponent from "./DayListComponent";
 
 
 interface TimetableState {
@@ -96,81 +97,7 @@ export default class Timetable extends React.Component<TimetableState> {
                 <Paper style={{marginTop: '1rem'}}>
                     {dayNumber.map(dayNumber => {
                         return (
-                            <Grid container
-                                  direction="column"
-                                  justify="center"
-                                  alignItems="stretch"
-                                  key={dayNumber}
-                                  style={{marginTop: '1rem', marginLeft: '1rem'}}>
-                                <Typography style={{marginLeft: '2rem'}} variant={"h6"}>{dayNumber}.{this.state.selectedMonth}</Typography>
-
-                                <Grid container
-                                      direction="row"
-                                      justify="flex-start"
-                                      alignItems="center"
-                                      style={{height: '2.5rem'}}
-                                >
-                                    <Grid item xs={3} sm={1} style={{borderRight: '1px solid grey'}}>
-                                        <Typography variant={"h6"} style={{fontSize: '1.2rem'}}>9:00</Typography>
-                                    </Grid>
-                                    <Grid item xs={7} sm={9} style={{borderRight: '1px solid grey'}}>
-                                        <Typography variant={"h6"} style={{fontSize: '1.2rem', marginLeft: '0.5rem'}}>Маша, услуга</Typography>
-                                    </Grid>
-                                    <Grid item xs={2} sm={2}>
-                                        <Typography variant={"h6"} style={{fontSize: '1.2rem', marginLeft: '0.5rem' }}>700</Typography>
-                                    </Grid>
-                                </Grid>
-                                <Grid container
-                                      direction="row"
-                                      justify="flex-start"
-                                      alignItems="center"
-                                      style={{height: '2.5rem'}}
-                                >
-                                    <Grid item xs={3} sm={1}>
-                                        <Typography variant={"h6"} style={{fontSize: '1.2rem'}}>-</Typography>
-                                    </Grid>
-                                    <Grid item xs={7} sm={9}>
-                                        <Typography variant={"h6"} style={{fontSize: '1.2rem'}}>-</Typography>
-                                    </Grid>
-                                    <Grid item xs={2} sm={2}>
-                                        <Typography variant={"h6"} style={{fontSize: '1.2rem'}}>-</Typography>
-                                    </Grid>
-                                </Grid>
-                                <Grid container
-                                      direction="row"
-                                      justify="flex-start"
-                                      alignItems="center"
-                                      style={{height: '2.5rem'}}
-                                >
-                                    <Grid item xs={3} sm={1}>
-                                        <Typography variant={"h6"} style={{fontSize: '1.2rem'}}>15:30</Typography>
-                                    </Grid>
-                                    <Grid item xs={7} sm={9}>
-                                        <Typography variant={"h6"} style={{fontSize: '1.2rem'}}>Рома, секас</Typography>
-                                    </Grid>
-                                    <Grid item xs={2} sm={2}>
-                                        <Typography variant={"h6"} style={{fontSize: '1.2rem'}}>1</Typography>
-                                    </Grid>
-                                </Grid>
-                                <Grid container
-                                      direction="row"
-                                      justify="flex-start"
-                                      alignItems="center"
-                                      style={{height: '2.5rem'}}
-                                >
-                                    <Grid item xs={3} sm={1}>
-                                        <Typography variant={"h6"} style={{fontSize: '1.2rem'}}>19:00</Typography>
-                                    </Grid>
-                                    <Grid item xs={7} sm={9}>
-                                        <Typography variant={"h6"} style={{fontSize: '1.2rem'}}>Ксюха, услуга</Typography>
-                                    </Grid>
-                                    <Grid item xs={2} sm={2}>
-                                        <Typography variant={"h6"} style={{fontSize: '1.2rem'}}>600</Typography>
-                                    </Grid>
-                                </Grid>
-
-                                <Divider/>
-                            </Grid>
+                            <DayListComponent key={dayNumber} dayNumber={dayNumber} selectedMonth={this.state.selectedMonth}/>
                         )
                     })}
                 </Paper>
