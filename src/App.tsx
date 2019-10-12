@@ -2,11 +2,12 @@ import React from 'react';
 import './App.css';
 
 const App: React.FC = () => {
+  console.log(process.env);
   return (
     <div className="App">
       <header className="App-header">
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          <code>{process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEVELOPMENT_URL : process.env.REACT_APP_PUBLIC_URL}</code>
         </p>
         <a
           className="App-link"
@@ -19,6 +20,6 @@ const App: React.FC = () => {
       </header>
     </div>
   );
-}
+};
 
 export default App;
