@@ -133,7 +133,7 @@ export const MainPage = () => {
                         </div>
                         <Divider/>
                         <List>
-                            <NavLink to={'/timetable'} style={{color: "black"}}
+                            <NavLink to={'/blesk-nails'} style={{color: "black"}}
                                      activeStyle={{color: "black", fontWeight: "bold"}}>
                                 <ListItem button>
                                     <ListItemIcon><Icon>event</Icon></ListItemIcon>
@@ -160,12 +160,12 @@ export const MainPage = () => {
                         <Container>
                             <div style={{marginTop: '2rem'}}>
                                 <div>
-                                    <Route exact path={'/timetable'} component={Timetable}/>
+                                    <Route exact path={'/blesk-nails'} component={Timetable}/>
                                 </div>
                                 <div>
                                     <Route exact path={'/statistic'} component={Statistic}/>
                                 </div>
-                                <Redirect to="/timetable"/>
+                                <Redirect to="/blesk-nails"/>
                             </div>
                         </Container>
                     </main>
