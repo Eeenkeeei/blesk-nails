@@ -4,6 +4,7 @@ import {RecordItemData, RecordsInDay} from "./interfaces";
 import Http from "./http";
 import {Sync} from "@material-ui/icons";
 import isMobile from 'ismobilejs';
+
 const http = new Http();
 
 interface DayListComponentProps {
@@ -17,7 +18,7 @@ interface DayListComponentState {
 
 }
 
-const getWeekDay = (date:Date) => {
+const getWeekDay = (date: Date) => {
     const days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
     const day = date.getDay();
     return days[day];
@@ -45,7 +46,7 @@ export default class DayListComponent extends React.Component<DayListComponentPr
                   alignItems="stretch"
                   key={this.props.dayNumber}
                   style={{marginTop: '1rem'}}>
-                <Chip style={{marginLeft: '2rem', width: '200px'}} variant="outlined" color="primary"  label={
+                <Chip style={{marginLeft: '2rem', width: '200px'}} variant="outlined" color="primary" label={
                     <Typography variant={"h6"}>
                         {this.props.dayNumber}.{this.props.selectedMonth} {getWeekDay(date)}
                     </Typography>}
@@ -147,14 +148,17 @@ class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
                     this.handleChangeInputGrid('time')
                 }} style={{height: '100%'}}>
                     {this.state.inputTime ?
-                        <form onSubmit={(evt)=>{evt.preventDefault(); this.handleUpdateRecord()}}>
-                        <TextField autoFocus={true}
-                                   value={this.state.time}
-                                   onChange={(evt) => this.setState({time: evt.target.value})}
-                                   type={"time"}
-                                   style={{marginLeft: '1rem', width: '100%'}}
-                        />
-                        </form>:
+                        <form onSubmit={(evt) => {
+                            evt.preventDefault();
+                            this.handleUpdateRecord()
+                        }}>
+                            <TextField autoFocus={true}
+                                       value={this.state.time}
+                                       onChange={(evt) => this.setState({time: evt.target.value})}
+                                       type={"time"}
+                                       style={{marginLeft: '1rem', width: '100%'}}
+                            />
+                        </form> :
                         <Typography variant={"h6"}
                                     style={{fontSize: fontSize, marginLeft: '1rem'}}>
                             {this.state.time}
@@ -166,11 +170,14 @@ class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
                     this.handleChangeInputGrid('comment')
                 }} style={{height: '100%'}}>
                     {this.state.inputComment ?
-                        <form onSubmit={(evt)=>{evt.preventDefault(); this.handleUpdateRecord()}}>
-                        <TextField autoFocus={true} value={this.state.comment}
-                                   onChange={(evt) => this.setState({comment: evt.target.value})}
-                                   fullWidth={true}/>
-                        </form>:
+                        <form onSubmit={(evt) => {
+                            evt.preventDefault();
+                            this.handleUpdateRecord()
+                        }}>
+                            <TextField autoFocus={true} value={this.state.comment}
+                                       onChange={(evt) => this.setState({comment: evt.target.value})}
+                                       fullWidth={true}/>
+                        </form> :
                         <Typography variant={"h6"} style={{fontSize: fontSize}}>{this.state.comment}</Typography>
                     }
                 </Grid>
@@ -179,12 +186,16 @@ class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
                     this.handleChangeInputGrid('cost')
                 }} style={{height: '100%'}}>
                     {this.state.inputCost ?
-                        <form onSubmit={(evt)=>{evt.preventDefault(); this.handleUpdateRecord()}}>
-                        <TextField autoFocus={true} value={this.state.cost}
-                                   onChange={(evt) => this.setState({cost: Number(evt.target.value)})}
-                                   fullWidth={true}/>
-                        </form>:
-                        <Typography variant={"h6"} style={{fontSize: fontSize}}>{this.state.cost === 0 ? null : this.state.cost}</Typography>
+                        <form onSubmit={(evt) => {
+                            evt.preventDefault();
+                            this.handleUpdateRecord()
+                        }}>
+                            <TextField autoFocus={true} value={this.state.cost}
+                                       onChange={(evt) => this.setState({cost: Number(evt.target.value)})}
+                                       fullWidth={true}/>
+                        </form> :
+                        <Typography variant={"h6"}
+                                    style={{fontSize: fontSize}}>{this.state.cost === 0 ? null : this.state.cost}</Typography>
                     }
                 </Grid>
 
