@@ -1,9 +1,9 @@
 import React from 'react';
-import {Grid, IconButton, TextField, Typography} from "@material-ui/core";
+import {Chip, Grid, IconButton, TextField, Typography} from "@material-ui/core";
 import {RecordItemData, RecordsInDay} from "./interfaces";
 import Http from "./http";
 import {Sync} from "@material-ui/icons";
-
+import isMobile from 'ismobilejs';
 const http = new Http();
 
 interface DayListComponentProps {
@@ -17,6 +17,12 @@ interface DayListComponentState {
 
 }
 
+const getWeekDay = (date:Date) => {
+    const days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+    const day = date.getDay();
+    return days[day];
+};
+
 export default class DayListComponent extends React.Component<DayListComponentProps, DayListComponentState> {
 
     public render() {
@@ -24,6 +30,13 @@ export default class DayListComponent extends React.Component<DayListComponentPr
         if (this.props.recordsInDay !== undefined) {
             dayListItemData.push(this.props.recordsInDay["1"], this.props.recordsInDay["2"], this.props.recordsInDay["3"], this.props.recordsInDay["4"])
         }
+        const date = new Date(
+            new Date().getFullYear()
+            + '-' +
+            `${this.props.selectedMonth.toString().length === 1 ? '0' + this.props.selectedMonth.toString() : this.props.selectedMonth}` +
+            '-' +
+            `${this.props.dayNumber.toString().length === 1 ? '0' + this.props.dayNumber.toString() : this.props.dayNumber}`
+        );
 
         return (
             <Grid container
@@ -32,8 +45,11 @@ export default class DayListComponent extends React.Component<DayListComponentPr
                   alignItems="stretch"
                   key={this.props.dayNumber}
                   style={{marginTop: '1rem'}}>
-                <Typography style={{marginLeft: '2rem'}}
-                            variant={"h6"}>{this.props.dayNumber}.{this.props.selectedMonth}</Typography>
+                <Chip style={{marginLeft: '2rem', width: '200px'}} variant="outlined" color="primary"  label={
+                    <Typography variant={"h6"}>
+                        {this.props.dayNumber}.{this.props.selectedMonth} {getWeekDay(date)}
+                    </Typography>}
+                />
                 {dayListItemData.map(data => {
                     return (
                         <DayListItem
@@ -118,6 +134,8 @@ class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
     };
 
     public render() {
+        const fontSize = isMobile().any ? '1rem' : '1.3rem';
+
         return (
             <Grid container
                   direction="row"
@@ -133,10 +151,12 @@ class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
                         <TextField autoFocus={true}
                                    value={this.state.time}
                                    onChange={(evt) => this.setState({time: evt.target.value})}
-                                   style={{marginLeft: '1rem', width: '50%'}}/>
+                                   type={"time"}
+                                   style={{marginLeft: '1rem', width: '100%'}}
+                        />
                         </form>:
                         <Typography variant={"h6"}
-                                    style={{fontSize: '1rem', marginLeft: '1rem'}}>
+                                    style={{fontSize: fontSize, marginLeft: '1rem'}}>
                             {this.state.time}
                         </Typography>
                     }
@@ -151,7 +171,7 @@ class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
                                    onChange={(evt) => this.setState({comment: evt.target.value})}
                                    fullWidth={true}/>
                         </form>:
-                        <Typography variant={"h6"} style={{fontSize: '1rem'}}>{this.state.comment}</Typography>
+                        <Typography variant={"h6"} style={{fontSize: fontSize}}>{this.state.comment}</Typography>
                     }
                 </Grid>
 
@@ -164,7 +184,7 @@ class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
                                    onChange={(evt) => this.setState({cost: Number(evt.target.value)})}
                                    fullWidth={true}/>
                         </form>:
-                        <Typography variant={"h6"} style={{fontSize: '1rem'}}>{this.state.cost}</Typography>
+                        <Typography variant={"h6"} style={{fontSize: fontSize}}>{this.state.cost === 0 ? null : this.state.cost}</Typography>
                     }
                 </Grid>
 
