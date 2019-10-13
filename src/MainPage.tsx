@@ -165,7 +165,7 @@ export const MainPage = () => {
                                 <div>
                                     <Route exact path={'/statistic'} component={Statistic}/>
                                 </div>
-                                <Redirect to="/statistic"/>
+                                <Redirect to="/blesk-nails"/>
                             </div>
                         </Container>
                     </main>
