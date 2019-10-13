@@ -1,9 +1,16 @@
 import React from 'react';
-import {Divider, Grid, Typography} from "@material-ui/core";
+import {Grid, IconButton, TextField, Typography} from "@material-ui/core";
+import {RecordItemData, RecordsInDay} from "./interfaces";
+import Http from "./http";
+import {Sync} from "@material-ui/icons";
+
+const http = new Http();
 
 interface DayListComponentProps {
-    dayNumber: number
+    recordsInDay: RecordsInDay
     selectedMonth: number
+    dayNumber: number
+    updateRecords: (items: any) => void
 }
 
 interface DayListComponentState {
@@ -13,22 +20,34 @@ interface DayListComponentState {
 export default class DayListComponent extends React.Component<DayListComponentProps, DayListComponentState> {
 
     public render() {
+        const dayListItemData: RecordItemData[] = [];
+        if (this.props.recordsInDay !== undefined) {
+            dayListItemData.push(this.props.recordsInDay["1"], this.props.recordsInDay["2"], this.props.recordsInDay["3"], this.props.recordsInDay["4"])
+        }
+
         return (
             <Grid container
                   direction="column"
                   justify="center"
                   alignItems="stretch"
                   key={this.props.dayNumber}
-                  style={{marginTop: '1rem', marginLeft: '1rem'}}>
-                <Typography style={{marginLeft: '2rem'}} variant={"h6"}>{this.props.dayNumber}.{this.props.selectedMonth}</Typography>
-
-                <DayListItem time={'9:00'} comment={'Ксюшка пердюшка'} cost={500}/>
-                <DayListItem time={'12:00'} comment={'Маша какаша'} cost={700}/>
-                <DayListItem time={'15:00'} comment={'Вася хуяся'} cost={228}/>
-                <DayListItem time={'19:00'} comment={'Рома секас'} cost={9999}/>
-
-
-                <Divider/>
+                  style={{marginTop: '1rem'}}>
+                <Typography style={{marginLeft: '2rem'}}
+                            variant={"h6"}>{this.props.dayNumber}.{this.props.selectedMonth}</Typography>
+                {dayListItemData.map(data => {
+                    return (
+                        <DayListItem
+                            updateRecords={this.props.updateRecords}
+                            month={this.props.selectedMonth}
+                            dayNumber={this.props.dayNumber}
+                            number={dayListItemData.indexOf(data) + 1}
+                            key={Math.random()}
+                            time={data.time}
+                            comment={data.comment}
+                            cost={data.cost}
+                        />
+                    )
+                })}
             </Grid>
         )
     }
@@ -38,12 +57,19 @@ interface DayListItemProps {
     time: string
     comment: string
     cost: number
+    dayNumber: number
+    number: number
+    updateRecords: (items: any) => void
+    month: number
 }
 
 interface DayListItemState {
     time: string
     comment: string
     cost: number
+    inputTime: boolean
+    inputComment: boolean
+    inputCost: boolean
 }
 
 class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
@@ -53,26 +79,99 @@ class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
         this.state = {
             time: props.time,
             comment: props.comment,
-            cost: props.cost
+            cost: props.cost,
+            inputTime: false,
+            inputComment: false,
+            inputCost: false
         }
     }
 
-    public render () {
+    public handleUpdateRecord = () => {
+        http.updateRecord(new Date().getFullYear().toString(), this.props.month, this.props.dayNumber, this.props.number, this.state.time, this.state.comment, this.state.cost)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.props.updateRecords(result);
+                    this.setState({
+                        inputTime: false,
+                        inputComment: false,
+                        inputCost: false
+                    });
+                }
+            )
+    };
+
+    public handleChangeInputGrid = (gridName: 'time' | 'comment' | 'cost') => {
+        if (gridName === 'time') {
+            this.setState({
+                inputTime: true
+            })
+        } else if (gridName === 'comment') {
+            this.setState({
+                inputComment: true
+            })
+        } else if (gridName === 'cost') {
+            this.setState({
+                inputCost: true
+            })
+        }
+    };
+
+    public render() {
         return (
             <Grid container
                   direction="row"
                   justify="flex-start"
                   alignItems="center"
-                  style={{height: '2.5rem'}}
+                  style={{height: '3.5rem', borderBottom: '1px solid #e0e0e0'}}
             >
-                <Grid item xs={3} sm={1}>
-                    <Typography variant={"h6"} style={{fontSize: '1.2rem'}}>{this.state.time}</Typography>
+                <Grid item xs={3} sm={1} onClick={() => {
+                    this.handleChangeInputGrid('time')
+                }} style={{height: '100%'}}>
+                    {this.state.inputTime ?
+                        <form onSubmit={(evt)=>{evt.preventDefault(); this.handleUpdateRecord()}}>
+                        <TextField autoFocus={true}
+                                   value={this.state.time}
+                                   onChange={(evt) => this.setState({time: evt.target.value})}
+                                   style={{marginLeft: '1rem', width: '50%'}}/>
+                        </form>:
+                        <Typography variant={"h6"}
+                                    style={{fontSize: '1rem', marginLeft: '1rem'}}>
+                            {this.state.time}
+                        </Typography>
+                    }
                 </Grid>
-                <Grid item xs={7} sm={9}>
-                    <Typography variant={"h6"} style={{fontSize: '1.2rem'}}>{this.state.comment}</Typography>
+
+                <Grid item xs={6} sm={8} onClick={() => {
+                    this.handleChangeInputGrid('comment')
+                }} style={{height: '100%'}}>
+                    {this.state.inputComment ?
+                        <form onSubmit={(evt)=>{evt.preventDefault(); this.handleUpdateRecord()}}>
+                        <TextField autoFocus={true} value={this.state.comment}
+                                   onChange={(evt) => this.setState({comment: evt.target.value})}
+                                   fullWidth={true}/>
+                        </form>:
+                        <Typography variant={"h6"} style={{fontSize: '1rem'}}>{this.state.comment}</Typography>
+                    }
                 </Grid>
-                <Grid item xs={2} sm={2}>
-                    <Typography variant={"h6"} style={{fontSize: '1.2rem'}}>{this.state.cost}</Typography>
+
+                <Grid item xs={1} sm={2} onClick={() => {
+                    this.handleChangeInputGrid('cost')
+                }} style={{height: '100%'}}>
+                    {this.state.inputCost ?
+                        <form onSubmit={(evt)=>{evt.preventDefault(); this.handleUpdateRecord()}}>
+                        <TextField autoFocus={true} value={this.state.cost}
+                                   onChange={(evt) => this.setState({cost: Number(evt.target.value)})}
+                                   fullWidth={true}/>
+                        </form>:
+                        <Typography variant={"h6"} style={{fontSize: '1rem'}}>{this.state.cost}</Typography>
+                    }
+                </Grid>
+
+                <Grid item xs={1} sm={1}>
+                    <IconButton onClick={() => this.handleUpdateRecord()}>
+                        <Sync/>
+                    </IconButton>
                 </Grid>
             </Grid>
         )

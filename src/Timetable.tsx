@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Divider,
+    CircularProgress,
     FormControl,
     Grid,
     InputLabel,
@@ -12,42 +12,73 @@ import {
 } from "@material-ui/core";
 import isMobile from 'ismobilejs';
 import DayListComponent from "./DayListComponent";
+import Http from "./http";
+import {RecordsInDay} from "./interfaces";
 
+const http = new Http();
 
 interface TimetableState {
     selectedMonth: number
+    uploadedRecords: any // объект с полями-номерами дня, в каждом поле по 4 поля с записями
 }
 
 export default class Timetable extends React.Component<TimetableState> {
 
     state = {
-        selectedMonth: new Date().getUTCMonth()+1
+        selectedMonth: new Date().getUTCMonth() + 1,
+        uploadedRecords: {loading: true} as any
     };
 
     public handleChangeMonth = (evt: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         this.setState({
-            selectedMonth: evt.target.value
+            selectedMonth: evt.target.value,
+        }, () => {
+            this.downloadRecords()
         })
     };
+
+    public downloadRecords = () => {
+        this.setState({uploadedRecords: {loading: true}}, ()=>{
+            http.getRecordsByDate(new Date().getFullYear().toString(), this.state.selectedMonth)
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        this.setState({
+                            uploadedRecords: result
+                        })
+                    }
+                )
+        })
+
+    };
+
+    public updateRecords = (items: any) => {
+        this.setState({
+            uploadedRecords: items
+        })
+    }
+
+    componentDidMount(): void {
+        this.downloadRecords()
+    }
 
     public render() {
         const daysInMonth = 33 - new Date(
             new Date(
-                new Date().getFullYear(),this.state.selectedMonth-1
+                new Date().getFullYear(), this.state.selectedMonth - 1
             ).getFullYear(),
             new Date(
-                new Date().getFullYear(),this.state.selectedMonth-1
+                new Date().getFullYear(), this.state.selectedMonth - 1
             ).getMonth(),
             33).getDate();
-        let dayNumber: number[] = []; // массив чисел в выбранном месяце
+        let recordsInMonth: RecordsInDay[] = []; // массив дней с записями в выбранном месяце
         let startNumber = 1;
         while (startNumber <= daysInMonth) {
-            dayNumber.push(startNumber);
-            startNumber++
+            if (this.state.uploadedRecords) {
+                recordsInMonth.push(this.state.uploadedRecords[startNumber]);
+                startNumber++
+            }
         }
-
-
-
         return (
             <Grid
                 container
@@ -66,7 +97,7 @@ export default class Timetable extends React.Component<TimetableState> {
                         {/* Селектор для ПК */}
                         {!isMobile().any ? <Select
                             value={this.state.selectedMonth}
-                            onChange={(evt)=>this.handleChangeMonth(evt)}
+                            onChange={(evt) => this.handleChangeMonth(evt)}
                             inputProps={{
                                 name: 'age',
                                 id: 'age-simple',
@@ -80,7 +111,7 @@ export default class Timetable extends React.Component<TimetableState> {
                         {/* Селектор для телефонов */}
                         {isMobile().any ? <NativeSelect
                             value={this.state.selectedMonth}
-                            onChange={(evt)=>this.handleChangeMonth(evt)}
+                            onChange={(evt) => this.handleChangeMonth(evt)}
                             inputProps={{
                                 name: 'age',
                                 id: 'age-native-helper',
@@ -95,11 +126,18 @@ export default class Timetable extends React.Component<TimetableState> {
                 </Paper>
 
                 <Paper style={{marginTop: '1rem'}}>
-                    {dayNumber.map(dayNumber => {
-                        return (
-                            <DayListComponent key={dayNumber} dayNumber={dayNumber} selectedMonth={this.state.selectedMonth}/>
-                        )
-                    })}
+                    {this.state.uploadedRecords.loading ? <CircularProgress/> : <div>
+                        {recordsInMonth.map(recordInDay => {
+                            return (
+                                <DayListComponent key={Math.random()}
+                                                  dayNumber={recordsInMonth.indexOf(recordInDay) + 1}
+                                                  selectedMonth={this.state.selectedMonth}
+                                                  recordsInDay={recordInDay}
+                                                  updateRecords={this.updateRecords}
+                                />
+                            )
+                        })}
+                    </div>}
                 </Paper>
 
             </Grid>
