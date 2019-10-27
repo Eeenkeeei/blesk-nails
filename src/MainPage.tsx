@@ -1,5 +1,5 @@
 import {Switch, Route, NavLink, Redirect} from 'react-router-dom'
-import React from 'react'
+import React, {useState} from 'react'
 import {
     AppBar,
     Container,
@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const MainPage = () => {
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleDrawerChange = () => {
         setOpen(!open);

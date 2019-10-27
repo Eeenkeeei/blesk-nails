@@ -20,6 +20,7 @@ const http = new Http();
 interface TimetableState {
     selectedMonth: number
     uploadedRecords: any // объект с полями-номерами дня, в каждом поле по 4 поля с записями
+    openSnackbar: boolean
 }
 
 export default class Timetable extends React.Component<TimetableState> {
@@ -31,7 +32,7 @@ export default class Timetable extends React.Component<TimetableState> {
 
     public handleChangeMonth = (evt: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         this.setState({
-            selectedMonth: evt.target.value,
+            selectedMonth: Number(evt.target.value),
         }, () => {
             this.downloadRecords()
         })
@@ -56,7 +57,7 @@ export default class Timetable extends React.Component<TimetableState> {
         this.setState({
             uploadedRecords: items
         })
-    }
+    };
 
     componentDidMount(): void {
         this.downloadRecords()
@@ -126,7 +127,7 @@ export default class Timetable extends React.Component<TimetableState> {
                 </Paper>
 
                 <Paper style={{marginTop: '1rem'}}>
-                    {this.state.uploadedRecords.loading ? <CircularProgress/> : <div>
+                    {this.state.uploadedRecords.loading ? <CircularProgress/> : <React.Fragment>
                         {recordsInMonth.map(recordInDay => {
                             return (
                                 <DayListComponent key={Math.random()}
@@ -137,9 +138,8 @@ export default class Timetable extends React.Component<TimetableState> {
                                 />
                             )
                         })}
-                    </div>}
+                    </React.Fragment>}
                 </Paper>
-
             </Grid>
         )
     }

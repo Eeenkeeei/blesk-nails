@@ -15,7 +15,6 @@ interface DayListComponentProps {
 }
 
 interface DayListComponentState {
-
 }
 
 const getWeekDay = (date: Date) => {
@@ -144,8 +143,9 @@ class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
                   alignItems="center"
                   style={{height: '3.5rem', borderBottom: '1px solid #e0e0e0'}}
             >
+
                 <Grid item xs={3} sm={1} onClick={() => {
-                    this.handleChangeInputGrid('time')
+                    this.handleChangeInputGrid('time');
                 }} style={{height: '100%'}}>
                     {this.state.inputTime ?
                         <form onSubmit={(evt) => {
@@ -156,7 +156,7 @@ class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
                                        value={this.state.time}
                                        onChange={(evt) => this.setState({time: evt.target.value})}
                                        type={"time"}
-                                       style={{marginLeft: '1rem', width: '100%'}}
+                                       style={{marginLeft: '1rem', width: '70%'}}
                             />
                         </form> :
                         <Typography variant={"h6"}
@@ -164,6 +164,7 @@ class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
                             {this.state.time}
                         </Typography>
                     }
+
                 </Grid>
 
                 <Grid item xs={6} sm={8} onClick={() => {
