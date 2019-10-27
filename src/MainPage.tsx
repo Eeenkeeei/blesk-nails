@@ -168,7 +168,9 @@ export const MainPage = () => {
                                 <Redirect to="/blesk-nails"/>
                             </div>
                         </Container>
+
                     </main>
+
                 </div>
             </MuiThemeProvider>
         </Switch>

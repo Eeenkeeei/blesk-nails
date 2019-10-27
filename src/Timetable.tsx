@@ -140,6 +140,7 @@ export default class Timetable extends React.Component<TimetableState> {
                         })}
                     </React.Fragment>}
                 </Paper>
+
             </Grid>
         )
     }

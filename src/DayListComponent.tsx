@@ -1,8 +1,8 @@
 import React from 'react';
-import {Chip, Grid, IconButton, TextField, Typography} from "@material-ui/core";
+import {Chip, Fab, Grid, IconButton, TextField, Typography} from "@material-ui/core";
 import {RecordItemData, RecordsInDay} from "./interfaces";
 import Http from "./http";
-import {Sync} from "@material-ui/icons";
+import {Cancel, Sync} from "@material-ui/icons";
 import isMobile from 'ismobilejs';
 
 const http = new Http();
@@ -205,6 +205,15 @@ class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
                         <Sync/>
                     </IconButton>
                 </Grid>
+                {this.state.inputTime ?
+                    <Fab color="secondary" style={{position: 'fixed', bottom: `${isMobile() ? '300px' : '15px'}`, right: 15, zIndex: 1000}}
+                         onClick={() => {
+                             this.setState({
+                                 time: ''
+                             }, ()=>{this.handleUpdateRecord()});
+                         }}>
+                        <Cancel/>
+                    </Fab> : null}
             </Grid>
         )
     }
