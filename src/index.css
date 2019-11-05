@@ -11,3 +11,32 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.border {
+  /*border: 1px solid black*/
+}
+
+.dayText {
+  font-size: 1.2rem;
+}
+
+.dayTimeText {
+  margin-top: 1rem !important;
+}
+
+.icon {
+  height: 40px !important;
+  width: 40px !important;
+}
+
+.instagramIcon {
+  color: rgb(164, 1, 161);
+}
+
+.whatsAppIcon {
+  color: rgb(28, 185, 52);
+}
+
+.vkIcon {
+  color: rgb(59, 97, 151);
+}

@@ -4,6 +4,9 @@ import {RecordItemData, RecordsInDay} from "./interfaces";
 import Http from "./http";
 import {Cancel, Sync} from "@material-ui/icons";
 import isMobile from 'ismobilejs';
+import InstagramIcon from '@material-ui/icons/Instagram';
+import WhatsAppIcon from '@material-ui/icons/WhatsApp';
+import ContactsIcon from '@material-ui/icons/Contacts';
 
 const http = new Http();
 
@@ -134,83 +137,113 @@ class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
     };
 
     public render() {
-        const fontSize = isMobile().any ? '1rem' : '1.3rem';
+
+        const timeForm = (<form onSubmit={(evt) => {
+            evt.preventDefault();
+            this.handleUpdateRecord()
+        }}>
+            <TextField autoFocus={true}
+                       value={this.state.time}
+                       onChange={(evt) => this.setState({time: evt.target.value})}
+                       type={"time"}
+                       style={{marginLeft: '1rem', width: '70%'}}
+            />
+        </form>);
+
+        const handleChangeInputTime = () => this.handleChangeInputGrid('time');
+
+
+        const commentForm = (
+            <form onSubmit={(evt) => {
+                evt.preventDefault();
+                this.handleUpdateRecord()
+            }}>
+                <TextField autoFocus={true} value={this.state.comment}
+                           onChange={(evt) => this.setState({comment: evt.target.value})}
+                           fullWidth={true}/>
+            </form>
+        );
+
+        const handleChangeInputComment = () => this.handleChangeInputGrid('comment');
+
+        const inputCost = (
+            <form onSubmit={(evt) => {
+                evt.preventDefault();
+                this.handleUpdateRecord()
+            }}>
+                <TextField autoFocus={true} value={this.state.cost}
+                           onChange={(evt) => this.setState({cost: Number(evt.target.value)})}
+                           fullWidth={true}/>
+            </form>
+        );
+
+        const handleChangeInputCost = () => this.handleChangeInputGrid('cost');
+
+        const GetIconByComment = () => {
+            if (this.state.comment.includes('inst')) {
+                return (<InstagramIcon className="icon instagramIcon"/>)
+            } else if (this.state.comment.includes('whats')) {
+                return (<WhatsAppIcon className="icon whatsAppIcon"/>)
+            } else if (this.state.comment.includes('vk')) {
+                return (<ContactsIcon className="icon vkIcon"/>)
+            }
+            return null
+        };
 
         return (
             <Grid container
                   direction="row"
                   justify="flex-start"
                   alignItems="center"
-                  style={{height: '3.5rem', borderBottom: '1px solid #e0e0e0'}}
+                  style={{height: '5rem', borderBottom: '1px solid #e0e0e0'}}
+                  className="border"
             >
-
-                <Grid item xs={3} sm={1} onClick={() => {
-                    this.handleChangeInputGrid('time');
-                }} style={{height: '100%'}}>
-                    {this.state.inputTime ?
-                        <form onSubmit={(evt) => {
-                            evt.preventDefault();
-                            this.handleUpdateRecord()
-                        }}>
-                            <TextField autoFocus={true}
-                                       value={this.state.time}
-                                       onChange={(evt) => this.setState({time: evt.target.value})}
-                                       type={"time"}
-                                       style={{marginLeft: '1rem', width: '70%'}}
-                            />
-                        </form> :
-                        <Typography variant={"h6"}
-                                    style={{fontSize: fontSize, marginLeft: '1rem'}}>
-                            {this.state.time}
-                        </Typography>
+                <Grid className="border" item xs={3} sm={1} onClick={handleChangeInputTime}
+                      style={{display: 'f'}}>
+                    {this.state.inputTime ? timeForm :
+                        <div style={{marginTop: '10px', display: 'inline-flex'}}>
+                            <span className="dayText">{this.state.time}</span>
+                            <GetIconByComment/>
+                        </div>
                     }
 
                 </Grid>
 
-                <Grid item xs={6} sm={8} onClick={() => {
-                    this.handleChangeInputGrid('comment')
-                }} style={{height: '100%'}}>
-                    {this.state.inputComment ?
-                        <form onSubmit={(evt) => {
-                            evt.preventDefault();
-                            this.handleUpdateRecord()
-                        }}>
-                            <TextField autoFocus={true} value={this.state.comment}
-                                       onChange={(evt) => this.setState({comment: evt.target.value})}
-                                       fullWidth={true}/>
-                        </form> :
-                        <Typography variant={"h6"} style={{fontSize: fontSize}}>{this.state.comment}</Typography>
+                <Grid className="border" item xs={6} sm={8} onClick={handleChangeInputComment}
+                      style={{padding: 10}}>
+                    {this.state.inputComment ? commentForm :
+                        <>
+                            <span className="dayText">{this.state.comment}</span>
+                        </>
                     }
                 </Grid>
 
-                <Grid item xs={1} sm={2} onClick={() => {
-                    this.handleChangeInputGrid('cost')
-                }} style={{height: '100%'}}>
-                    {this.state.inputCost ?
-                        <form onSubmit={(evt) => {
-                            evt.preventDefault();
-                            this.handleUpdateRecord()
-                        }}>
-                            <TextField autoFocus={true} value={this.state.cost}
-                                       onChange={(evt) => this.setState({cost: Number(evt.target.value)})}
-                                       fullWidth={true}/>
-                        </form> :
-                        <Typography variant={"h6"}
-                                    style={{fontSize: fontSize}}>{this.state.cost === 0 ? null : this.state.cost}</Typography>
-                    }
+                <Grid className="border" item xs={1} sm={2} onClick={handleChangeInputCost}>
+                    {this.state.inputCost ? inputCost :
+                        <span className="dayText" >{this.state.cost === 0 ? null : this.state.cost}</span>}
                 </Grid>
 
-                <Grid item xs={1} sm={1}>
+                <Grid item xs={1} sm={1} className="border">
                     <IconButton onClick={() => this.handleUpdateRecord()}>
                         <Sync/>
                     </IconButton>
                 </Grid>
+
+
+                {/* кнопка очистки времени */}
                 {this.state.inputTime ?
-                    <Fab color="secondary" style={{position: 'fixed', bottom: `${isMobile() ? '300px' : '15px'}`, right: 15, zIndex: 1000}}
+                    <Fab color="secondary" style={{
+                        position: 'fixed',
+                        bottom: `${isMobile() ? '300px' : '15px'}`,
+                        right: 15,
+                        zIndex: 1000
+                    }}
                          onClick={() => {
                              this.setState({
                                  time: ''
-                             }, ()=>{this.handleUpdateRecord()});
+                             }, () => {
+                                 this.handleUpdateRecord()
+                             });
                          }}>
                         <Cancel/>
                     </Fab> : null}
