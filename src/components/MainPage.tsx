@@ -10,7 +10,7 @@ import {
     Typography,
 } from "@material-ui/core";
 import {MuiThemeProvider} from '@material-ui/core/styles';
-import {theme} from "./Theme";
+import {theme} from "../common/Theme";
 import Timetable from "./Timetable";
 import clsx from 'clsx';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';

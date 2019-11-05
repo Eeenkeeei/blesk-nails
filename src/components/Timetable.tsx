@@ -12,8 +12,8 @@ import {
 } from "@material-ui/core";
 import isMobile from 'ismobilejs';
 import DayListComponent from "./DayListComponent";
-import Http from "./http";
-import {RecordsInDay} from "./interfaces";
+import Http from "../storage/http";
+import {RecordsInDay} from "../common/interfaces";
 
 const http = new Http();
 

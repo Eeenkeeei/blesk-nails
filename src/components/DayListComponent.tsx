@@ -1,7 +1,7 @@
 import React from 'react';
 import {Chip, Fab, Grid, IconButton, TextField, Typography} from "@material-ui/core";
-import {RecordItemData, RecordsInDay} from "./interfaces";
-import Http from "./http";
+import {RecordItemData, RecordsInDay} from "../common/interfaces";
+import Http from "../storage/http";
 import {Cancel, Sync} from "@material-ui/icons";
 import isMobile from 'ismobilejs';
 import InstagramIcon from '@material-ui/icons/Instagram';
