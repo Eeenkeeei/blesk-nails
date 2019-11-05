@@ -14,20 +14,23 @@ import isMobile from 'ismobilejs';
 import DayListComponent from "./DayListComponent";
 import Http from "../storage/http";
 import {RecordsInDay} from "../common/interfaces";
+import {LocalStorage} from "../storage/localStorage";
 
 const http = new Http();
+const localStorage = new LocalStorage();
 
 interface TimetableState {
     selectedMonth: number
-    uploadedRecords: any // объект с полями-номерами дня, в каждом поле по 4 поля с записями
-    openSnackbar: boolean
+    uploadedRecords: any | undefined // объект с полями-номерами дня, в каждом поле по 4 поля с записями
+    loading: boolean
 }
 
 export default class Timetable extends React.Component<TimetableState> {
 
     state = {
         selectedMonth: new Date().getUTCMonth() + 1,
-        uploadedRecords: {loading: true} as any
+        uploadedRecords: {loading: true} as any,
+        loading: true
     };
 
     public handleChangeMonth = (evt: React.ChangeEvent<{ name?: string; value: unknown }>) => {
@@ -39,18 +42,17 @@ export default class Timetable extends React.Component<TimetableState> {
     };
 
     public downloadRecords = () => {
-        this.setState({uploadedRecords: {loading: true}}, ()=>{
-            http.getRecordsByDate(new Date().getFullYear().toString(), this.state.selectedMonth)
-                .then(res => res.json())
-                .then(
-                    (result) => {
-                        this.setState({
-                            uploadedRecords: result
-                        })
-                    }
-                )
-        })
-
+        http.getRecordsByDate(new Date().getFullYear().toString(), this.state.selectedMonth)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        uploadedRecords: result,
+                        loading: false
+                    });
+                    localStorage.addData(result)
+                }
+            )
     };
 
     public updateRecords = (items: any) => {
@@ -60,7 +62,12 @@ export default class Timetable extends React.Component<TimetableState> {
     };
 
     componentDidMount(): void {
-        this.downloadRecords()
+        if (localStorage.getData()){
+            this.setState({
+                uploadedRecords: JSON.parse(localStorage.getData() as string)
+            });
+        }
+        this.downloadRecords();
     }
 
     public render() {
@@ -87,6 +94,9 @@ export default class Timetable extends React.Component<TimetableState> {
                 justify="center"
                 alignItems="stretch"
             >
+                {this.state.loading ? <div className="loadingMessage">
+                    Данные обновляются
+                </div> : null}
                 <Paper style={{padding: '10px'}}>
                     <Grid item xs={12} sm={12}>
                         <Typography variant={"h6"}>
@@ -94,15 +104,11 @@ export default class Timetable extends React.Component<TimetableState> {
                         </Typography>
                     </Grid>
                     <FormControl style={{marginTop: '1rem'}}>
-                        <InputLabel htmlFor="age-simple">Месяц</InputLabel>
+                        <InputLabel>Месяц</InputLabel>
                         {/* Селектор для ПК */}
                         {!isMobile().any ? <Select
                             value={this.state.selectedMonth}
                             onChange={(evt) => this.handleChangeMonth(evt)}
-                            inputProps={{
-                                name: 'age',
-                                id: 'age-simple',
-                            }}
                             style={{width: '300px'}}
                         >
                             <MenuItem value={10}>Октябрь</MenuItem>
@@ -113,10 +119,6 @@ export default class Timetable extends React.Component<TimetableState> {
                         {isMobile().any ? <NativeSelect
                             value={this.state.selectedMonth}
                             onChange={(evt) => this.handleChangeMonth(evt)}
-                            inputProps={{
-                                name: 'age',
-                                id: 'age-native-helper',
-                            }}
                             style={{width: '320px'}}
                         >
                             <option value={10}>Октябрь</option>
@@ -127,7 +129,7 @@ export default class Timetable extends React.Component<TimetableState> {
                 </Paper>
 
                 <Paper style={{marginTop: '1rem'}}>
-                    {this.state.uploadedRecords.loading ? <CircularProgress/> : <React.Fragment>
+                    {!this.state.uploadedRecords ? <CircularProgress/> : <>
                         {recordsInMonth.map(recordInDay => {
                             return (
                                 <DayListComponent key={Math.random()}
@@ -138,9 +140,8 @@ export default class Timetable extends React.Component<TimetableState> {
                                 />
                             )
                         })}
-                    </React.Fragment>}
+                    </>}
                 </Paper>
-
             </Grid>
         )
     }

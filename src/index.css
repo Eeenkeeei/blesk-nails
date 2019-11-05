@@ -40,3 +40,19 @@ code {
 .vkIcon {
   color: rgb(59, 97, 151);
 }
+
+.loadingMessage {
+  font-family: AppleSystemUIFont, sans-serif;
+  position: sticky;
+  top: 4rem;
+  margin-left: auto;
+  margin-right: auto;
+  height: auto;
+  width: 250px;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 20px;
+  background-color: rgba(22, 22, 22, 0.09);
+  border: 1px solid #e0e0e0
+}
