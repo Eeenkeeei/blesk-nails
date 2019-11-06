@@ -198,10 +198,9 @@ class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
                   style={{height: '5rem', borderBottom: '1px solid #e0e0e0'}}
                   className="border"
             >
-                <Grid className="border itemGrid" item xs={3} sm={1} onClick={handleChangeInputTime}
-                      style={{display: 'f'}}>
+                <Grid className="border itemGrid" item xs={3} sm={1} onClick={handleChangeInputTime}>
                     {this.state.inputTime ? timeForm :
-                        <div style={{marginTop: '10px', display: 'inline-flex'}}>
+                        <div style={{display: 'inline-flex'}}>
                             <span className="dayText">{this.state.time}</span>
                             <GetIconByComment/>
                         </div>
@@ -209,21 +208,19 @@ class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
 
                 </Grid>
 
-                <Grid className="border itemGrid" item xs={6} sm={8} onClick={handleChangeInputComment}
-                      style={{padding: 10}}>
-                    {this.state.inputComment ? commentForm :
-                        <>
-                            <span className="dayText">{this.state.comment}</span>
-                        </>
+                <Grid className="border itemGrid" item xs={6} sm={8} onClick={handleChangeInputComment}>
+                    {this.state.inputComment ? commentForm : <span className="dayText">{this.state.comment}</span>
                     }
                 </Grid>
+                {this.state.cost === 0 ?
+                    <Grid className="border itemGrid" item xs={1} sm={2} onClick={handleChangeInputCost}>
+                        {this.state.inputCost ? inputCost : null}
+                    </Grid> :
+                    <Grid className="border itemGrid" item xs={1} sm={2} onClick={handleChangeInputCost}>
+                        {this.state.inputCost ? inputCost : <span className="dayText">{this.state.cost}</span>}
+                    </Grid>}
 
-                <Grid className="border itemGrid" item xs={1} sm={2} onClick={handleChangeInputCost}>
-                    {this.state.inputCost ? inputCost :
-                        <span className="dayText" >{this.state.cost === 0 ? null : this.state.cost}</span>}
-                </Grid>
-
-                <Grid item xs={1} sm={1} className="border" >
+                <Grid item xs={1} sm={1} className="border">
                     <IconButton onClick={() => this.handleUpdateRecord()}>
                         <Sync/>
                     </IconButton>
