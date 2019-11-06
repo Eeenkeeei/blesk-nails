@@ -62,7 +62,7 @@ export default class Timetable extends React.Component<TimetableState> {
     };
 
     componentDidMount(): void {
-        if (localStorage.getData()){
+        if (localStorage.getData()) {
             this.setState({
                 uploadedRecords: JSON.parse(localStorage.getData() as string)
             });

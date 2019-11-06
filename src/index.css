@@ -16,6 +16,10 @@ code {
   /*border: 1px solid black*/
 }
 
+.itemGrid {
+  height: 100%
+}
+
 .dayText {
   font-size: 1.2rem;
 }
