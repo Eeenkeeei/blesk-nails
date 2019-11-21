@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Eeenkeeei/blesk-nails.svg?branch=master)](https://travis-ci.org/Eeenkeeei/blesk-nails)
+
 # Приложение для записи клиенток 
 
 ## Что это?
