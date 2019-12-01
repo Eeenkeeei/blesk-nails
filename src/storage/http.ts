@@ -42,4 +42,14 @@ export default class Http {
             },
         });
     }
+
+    public setPassword(password: string) {
+        return fetch(this.url + '/setPassword', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({password})
+        });
+    }
 }

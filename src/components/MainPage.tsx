@@ -17,6 +17,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Statistic from "./Statistic";
 import {LoginPage} from "./LoginPage";
+import {ChangePassPage} from "./ChangePassPage";
 
 const drawerWidth = 240;
 
@@ -149,6 +150,13 @@ export const MainPage = () => {
                                             <ListItemText primary={"Статистика"}/>
                                         </ListItem>
                                     </NavLink>
+                                    <NavLink to={'/change-password'} style={{color: "black"}}
+                                             activeStyle={{color: "black", fontWeight: "bold"}}>
+                                        <ListItem button>
+                                            <ListItemIcon><Icon>fingerprint</Icon></ListItemIcon>
+                                            <ListItemText primary={"Изменить пароль"}/>
+                                        </ListItem>
+                                    </NavLink>
                                 </List>
                             </Drawer>
 
@@ -166,6 +174,9 @@ export const MainPage = () => {
                                         </div>
                                         <div>
                                             <Route exact path={'/statistic'} component={Statistic}/>
+                                        </div>
+                                        <div>
+                                            <Route exact path={'/change-password'} component={ChangePassPage}/>
                                         </div>
                                         <Redirect to="/blesk-nails"/>
                                     </div>
