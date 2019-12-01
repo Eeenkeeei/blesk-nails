@@ -18,6 +18,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Statistic from "./Statistic";
 import {LocalStorage} from "../storage/localStorage";
 import {LoginPage} from "./LoginPage";
+import Http from "../storage/http";
 
 const drawerWidth = 240;
 
@@ -79,10 +80,9 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const localStorage = new LocalStorage();
-
 export const MainPage = () => {
-
+    const ls = new LocalStorage();
+    const http = new Http();
     const [open, setOpen] = useState(false);
     const [confirmed, setConfirmed] = useState(false);
     const handleDrawerChange = () => {
@@ -90,6 +90,17 @@ export const MainPage = () => {
     };
 
     useEffect(() => {
+        const token = ls.getToken();
+        if (token) {
+            http.authToken(token)
+                .then (res => res.json())
+                .then (result => {
+                    if (result){
+                        setConfirmed(true)
+                    }
+                })
+        }
+
     }, []);
 
     const classes = useStyles();
@@ -181,7 +192,10 @@ export const MainPage = () => {
                         </div>
                     </MuiThemeProvider>
                 </Switch>
-            ) : <LoginPage setConfirmed={setConfirmed} />}
+            ) :
+                <>
+                <LoginPage setConfirmed={setConfirmed} />
+                </>}
         </>
     )
 };

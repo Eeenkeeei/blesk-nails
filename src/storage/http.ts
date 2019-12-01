@@ -32,4 +32,14 @@ export default class Http {
             body: JSON.stringify({password})
         });
     }
+
+    public authToken (token: string) {
+        return fetch(this.url + '/authToken', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        });
+    }
 }
