@@ -22,4 +22,14 @@ export default class Http {
             body: JSON.stringify({year, month, day, number, time, comment, cost})
         });
     }
+
+    public auth(password: string) {
+        return fetch(this.url + '/auth', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({password})
+        });
+    }
 }

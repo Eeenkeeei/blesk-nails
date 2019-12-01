@@ -1,5 +1,5 @@
 import {Switch, Route, NavLink, Redirect} from 'react-router-dom'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {
     AppBar,
     Container,
@@ -16,6 +16,8 @@ import clsx from 'clsx';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Statistic from "./Statistic";
+import {LocalStorage} from "../storage/localStorage";
+import {LoginPage} from "./LoginPage";
 
 const drawerWidth = 240;
 
@@ -77,103 +79,110 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+const localStorage = new LocalStorage();
+
 export const MainPage = () => {
 
     const [open, setOpen] = useState(false);
-
+    const [confirmed, setConfirmed] = useState(false);
     const handleDrawerChange = () => {
         setOpen(!open);
     };
 
+    useEffect(() => {
+    }, []);
+
     const classes = useStyles();
 
     return (
-        <Switch>
-            <MuiThemeProvider theme={theme}>
-                <div className={classes.root}>
-                    <AppBar
-                        position="fixed"
-                        className={clsx(classes.appBar, {
-                            [classes.appBarShift]: open,
-                        })}
-                    >
-                        <Toolbar>
-                            <IconButton
-                                color="inherit"
-                                aria-label="open drawer"
-                                onClick={handleDrawerChange}
-                                edge="start"
-                                className={clsx(classes.menuButton, open && classes.hide)}
+        <>
+            {confirmed ? (<Switch>
+                    <MuiThemeProvider theme={theme}>
+                        <div className={classes.root}>
+                            <AppBar
+                                position="fixed"
+                                className={clsx(classes.appBar, {
+                                    [classes.appBarShift]: open,
+                                })}
                             >
-                                <Icon>menu</Icon>
-                            </IconButton>
-                            <Typography variant="h6" noWrap style={{fontSize: '1.2rem'}}>
-                                Ноготочки
-                            </Typography>
-                            &nbsp;&nbsp;
-                            <Typography variant="h6" noWrap style={{marginLeft: 'auto', fontSize: '1.2rem'}}>
-                                {new Date().toLocaleDateString('ru')}
-                            </Typography>
-                        </Toolbar>
-                    </AppBar>
+                                <Toolbar>
+                                    <IconButton
+                                        color="inherit"
+                                        aria-label="open drawer"
+                                        onClick={handleDrawerChange}
+                                        edge="start"
+                                        className={clsx(classes.menuButton, open && classes.hide)}
+                                    >
+                                        <Icon>menu</Icon>
+                                    </IconButton>
+                                    <Typography variant="h6" noWrap style={{fontSize: '1.2rem'}}>
+                                        Ноготочки
+                                    </Typography>
+                                    &nbsp;&nbsp;
+                                    <Typography variant="h6" noWrap style={{marginLeft: 'auto', fontSize: '1.2rem'}}>
+                                        {new Date().toLocaleDateString('ru')}
+                                    </Typography>
+                                </Toolbar>
+                            </AppBar>
 
-                    <Drawer
-                        className={classes.drawer}
-                        variant="persistent"
-                        anchor="left"
-                        open={open}
-                        classes={{
-                            paper: classes.drawerPaper,
-                        }}
-                    >
-                        <div className={classes.drawerHeader}>
-                            <IconButton onClick={handleDrawerChange}>
-                                {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
-                            </IconButton>
+                            <Drawer
+                                className={classes.drawer}
+                                variant="persistent"
+                                anchor="left"
+                                open={open}
+                                classes={{
+                                    paper: classes.drawerPaper,
+                                }}
+                            >
+                                <div className={classes.drawerHeader}>
+                                    <IconButton onClick={handleDrawerChange}>
+                                        {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
+                                    </IconButton>
+                                </div>
+                                <Divider/>
+                                <List>
+                                    <NavLink to={'/blesk-nails'} style={{color: "black"}}
+                                             activeStyle={{color: "black", fontWeight: "bold"}}>
+                                        <ListItem button>
+                                            <ListItemIcon><Icon>event</Icon></ListItemIcon>
+                                            <ListItemText primary={"Расписание"}/>
+                                        </ListItem>
+                                    </NavLink>
+                                    <NavLink to={'/statistic'} style={{color: "black"}}
+                                             activeStyle={{color: "black", fontWeight: "bold"}}>
+                                        <ListItem button>
+                                            <ListItemIcon><Icon>trending_up</Icon></ListItemIcon>
+                                            <ListItemText primary={"Статистика"}/>
+                                        </ListItem>
+                                    </NavLink>
+                                </List>
+                            </Drawer>
+
+                            {/*{ ТЕЛО ВСЕЙ СТРАНИЦЫ }*/}
+                            <main
+                                className={clsx(classes.content, {
+                                    [classes.contentShift]: open,
+                                })}
+                            >
+                                <div className={classes.drawerHeader}/>
+                                <Container>
+                                    <div style={{marginTop: '2rem'}}>
+                                        <div>
+                                            <Route exact path={'/blesk-nails'} component={Timetable}/>
+                                        </div>
+                                        <div>
+                                            <Route exact path={'/statistic'} component={Statistic}/>
+                                        </div>
+                                        <Redirect to="/blesk-nails"/>
+                                    </div>
+                                </Container>
+
+                            </main>
                         </div>
-                        <Divider/>
-                        <List>
-                            <NavLink to={'/blesk-nails'} style={{color: "black"}}
-                                     activeStyle={{color: "black", fontWeight: "bold"}}>
-                                <ListItem button>
-                                    <ListItemIcon><Icon>event</Icon></ListItemIcon>
-                                    <ListItemText primary={"Расписание"}/>
-                                </ListItem>
-                            </NavLink>
-                            <NavLink to={'/statistic'} style={{color: "black"}}
-                                     activeStyle={{color: "black", fontWeight: "bold"}}>
-                                <ListItem button>
-                                    <ListItemIcon><Icon>trending_up</Icon></ListItemIcon>
-                                    <ListItemText primary={"Статистика"}/>
-                                </ListItem>
-                            </NavLink>
-                        </List>
-                    </Drawer>
-
-                    {/*{ ТЕЛО ВСЕЙ СТРАНИЦЫ }*/}
-                    <main
-                        className={clsx(classes.content, {
-                            [classes.contentShift]: open,
-                        })}
-                    >
-                        <div className={classes.drawerHeader}/>
-                        <Container>
-                            <div style={{marginTop: '2rem'}}>
-                                <div>
-                                    <Route exact path={'/blesk-nails'} component={Timetable}/>
-                                </div>
-                                <div>
-                                    <Route exact path={'/statistic'} component={Statistic}/>
-                                </div>
-                                <Redirect to="/blesk-nails"/>
-                            </div>
-                        </Container>
-
-                    </main>
-
-                </div>
-            </MuiThemeProvider>
-        </Switch>
+                    </MuiThemeProvider>
+                </Switch>
+            ) : <LoginPage setConfirmed={setConfirmed} />}
+        </>
     )
 };
 
