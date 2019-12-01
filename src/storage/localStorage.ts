@@ -3,8 +3,8 @@ export class LocalStorage {
     public token:any;
     constructor() {
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        this.data = JSON.parse(<string>localStorage.getItem('data'));
-        this.token = JSON.parse(<string>localStorage.getItem('pass'));
+        this.data = JSON.parse(localStorage.getItem('data') as string);
+        this.token = JSON.parse(localStorage.getItem('pass') as string);
     }
 
     addData(data:any) {

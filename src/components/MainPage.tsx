@@ -1,5 +1,5 @@
 import {Switch, Route, NavLink, Redirect} from 'react-router-dom'
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {
     AppBar,
     Container,
@@ -16,9 +16,7 @@ import clsx from 'clsx';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Statistic from "./Statistic";
-import {LocalStorage} from "../storage/localStorage";
 import {LoginPage} from "./LoginPage";
-import Http from "../storage/http";
 
 const drawerWidth = 240;
 
@@ -81,27 +79,11 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const MainPage = () => {
-    const ls = new LocalStorage();
-    const http = new Http();
     const [open, setOpen] = useState(false);
-    const [confirmed, setConfirmed] = useState(false);
+    const [confirmed, setConfirmed] = useState(true);
     const handleDrawerChange = () => {
         setOpen(!open);
     };
-
-    useEffect(() => {
-        const token = ls.getToken();
-        if (token) {
-            http.authToken(token)
-                .then (res => res.json())
-                .then (result => {
-                    if (result){
-                        setConfirmed(true)
-                    }
-                })
-        }
-
-    }, []);
 
     const classes = useStyles();
 
@@ -130,7 +112,8 @@ export const MainPage = () => {
                                         Ноготочки
                                     </Typography>
                                     &nbsp;&nbsp;
-                                    <Typography variant="h6" noWrap style={{marginLeft: 'auto', fontSize: '1.2rem'}}>
+                                    <Typography variant="h6" noWrap
+                                                style={{marginLeft: 'auto', fontSize: '1.2rem'}}>
                                         {new Date().toLocaleDateString('ru')}
                                     </Typography>
                                 </Toolbar>
@@ -179,7 +162,7 @@ export const MainPage = () => {
                                 <Container>
                                     <div style={{marginTop: '2rem'}}>
                                         <div>
-                                            <Route exact path={'/blesk-nails'} component={Timetable}/>
+                                            <Route exact path={'/blesk-nails'} component={() => <Timetable setConfirmed={setConfirmed}/>}/>
                                         </div>
                                         <div>
                                             <Route exact path={'/statistic'} component={Statistic}/>
@@ -192,10 +175,7 @@ export const MainPage = () => {
                         </div>
                     </MuiThemeProvider>
                 </Switch>
-            ) :
-                <>
-                <LoginPage setConfirmed={setConfirmed} />
-                </>}
+            ) : <LoginPage setConfirmed={setConfirmed}/>}
         </>
     )
 };

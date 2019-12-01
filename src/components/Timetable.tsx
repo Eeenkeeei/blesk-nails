@@ -25,7 +25,11 @@ interface TimetableState {
     loading: boolean
 }
 
-export default class Timetable extends React.Component<TimetableState> {
+interface TimetableProps {
+    setConfirmed: (value: boolean) => void
+}
+
+export default class Timetable extends React.Component<TimetableProps, TimetableState> {
 
     state = {
         selectedMonth: new Date().getUTCMonth() + 1,
@@ -62,6 +66,20 @@ export default class Timetable extends React.Component<TimetableState> {
     };
 
     componentDidMount(): void {
+        const token = localStorage.getToken();
+        if (token) {
+            http.authToken(token)
+                .then(res => res.json())
+                .then(result => {
+                    if (result) {
+                        this.props.setConfirmed(true)
+                    } else {
+                        this.props.setConfirmed(false)
+                    }
+                })
+        } else {
+            this.props.setConfirmed(false)
+        }
         if (localStorage.getData()) {
             this.setState({
                 uploadedRecords: JSON.parse(localStorage.getData() as string)
