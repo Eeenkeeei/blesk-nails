@@ -70,7 +70,6 @@ export default class DayListComponent extends React.Component<DayListComponentPr
                 })}
             </Grid>
         )
-        return null
     }
 }
 
