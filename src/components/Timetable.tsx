@@ -15,12 +15,12 @@ import DayListComponent from "./DayListComponent";
 import Http from "../storage/http";
 import {RecordsInDay} from "../common/interfaces";
 import {LocalStorage} from "../storage/localStorage";
-
 const http = new Http();
 const localStorage = new LocalStorage();
+const moment = require('moment');
 
 interface TimetableState {
-    selectedMonth: number
+    selectedDate: string
     uploadedRecords: any | undefined // объект с полями-номерами дня, в каждом поле по 4 поля с записями
     loading: boolean
 }
@@ -32,21 +32,21 @@ interface TimetableProps {
 export default class Timetable extends React.Component<TimetableProps, TimetableState> {
 
     state = {
-        selectedMonth: new Date().getUTCMonth() + 1,
+        selectedDate: moment().format('YYYY-MM'),
         uploadedRecords: {loading: true} as any,
         loading: true
     };
 
     public handleChangeMonth = (evt: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         this.setState({
-            selectedMonth: Number(evt.target.value),
+            selectedDate: String(evt.target.value)
         }, () => {
             this.downloadRecords()
         })
     };
 
     public downloadRecords = () => {
-        http.getRecordsByDate(new Date().getFullYear().toString(), this.state.selectedMonth)
+        http.getRecordsByDate(this.state.selectedDate.split('-')[0], this.state.selectedDate.split('-')[1])
             .then(res => res.json())
             .then(
                 (result) => {
@@ -91,10 +91,10 @@ export default class Timetable extends React.Component<TimetableProps, Timetable
     public render() {
         const daysInMonth = 33 - new Date(
             new Date(
-                new Date().getFullYear(), this.state.selectedMonth - 1
+                Number(this.state.selectedDate.split('-')[0]), Number(this.state.selectedDate.split('-')[1])
             ).getFullYear(),
             new Date(
-                new Date().getFullYear(), this.state.selectedMonth - 1
+                Number(this.state.selectedDate.split('-')[0]), Number(this.state.selectedDate.split('-')[1])
             ).getMonth(),
             33).getDate();
         let recordsInMonth: RecordsInDay[] = []; // массив дней с записями в выбранном месяце
@@ -125,23 +125,35 @@ export default class Timetable extends React.Component<TimetableProps, Timetable
                         <InputLabel>Месяц</InputLabel>
                         {/* Селектор для ПК */}
                         {!isMobile().any ? <Select
-                            value={this.state.selectedMonth}
+                            value={this.state.selectedDate}
                             onChange={(evt) => this.handleChangeMonth(evt)}
                             style={{width: '300px'}}
                         >
-                            <MenuItem value={10}>Октябрь</MenuItem>
-                            <MenuItem value={11}>Ноябрь</MenuItem>
-                            <MenuItem value={12}>Декабрь</MenuItem>
+                            <MenuItem value={"2019-10"}>Октябрь</MenuItem>
+                            <MenuItem value={"2019-11"}>Ноябрь</MenuItem>
+                            <MenuItem value={"2019-12"}>Декабрь</MenuItem>
+                            <MenuItem value={"2020-01"}>Январь</MenuItem>
+                            <MenuItem value={"2020-02"}>Февраль</MenuItem>
+                            <MenuItem value={"2020-03"}>Март</MenuItem>
+                            <MenuItem value={"2020-04"}>Апрель</MenuItem>
+                            <MenuItem value={"2020-05"}>Май</MenuItem>
+                            <MenuItem value={"2020-06"}>Июнь</MenuItem>
                         </Select> : null}
                         {/* Селектор для телефонов */}
                         {isMobile().any ? <NativeSelect
-                            value={this.state.selectedMonth}
+                            value={this.state.selectedDate}
                             onChange={(evt) => this.handleChangeMonth(evt)}
                             style={{width: '320px'}}
                         >
-                            <option value={10}>Октябрь</option>
-                            <option value={11}>Ноябрь</option>
-                            <option value={12}>Декабрь</option>
+                            <MenuItem value={"2019-10"}>Октябрь</MenuItem>
+                            <MenuItem value={"2019-11"}>Ноябрь</MenuItem>
+                            <MenuItem value={"2019-12"}>Декабрь</MenuItem>
+                            <MenuItem value={"2020-01"}>Январь</MenuItem>
+                            <MenuItem value={"2020-02"}>Февраль</MenuItem>
+                            <MenuItem value={"2020-03"}>Март</MenuItem>
+                            <MenuItem value={"2020-04"}>Апрель</MenuItem>
+                            <MenuItem value={"2020-05"}>Май</MenuItem>
+                            <MenuItem value={"2020-06"}>Июнь</MenuItem>
                         </NativeSelect> : null}
                     </FormControl>
                 </Paper>
@@ -152,7 +164,7 @@ export default class Timetable extends React.Component<TimetableProps, Timetable
                             return (
                                 <DayListComponent key={Math.random()}
                                                   dayNumber={recordsInMonth.indexOf(recordInDay) + 1}
-                                                  selectedMonth={this.state.selectedMonth}
+                                                  selectedDate={this.state.selectedDate}
                                                   recordsInDay={recordInDay}
                                                   updateRecords={this.updateRecords}
                                 />

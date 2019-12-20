@@ -12,7 +12,7 @@ const http = new Http();
 
 interface DayListComponentProps {
     recordsInDay: RecordsInDay
-    selectedMonth: number
+    selectedDate: string
     dayNumber: number
     updateRecords: (items: any) => void
 }
@@ -34,9 +34,9 @@ export default class DayListComponent extends React.Component<DayListComponentPr
             dayListItemData.push(this.props.recordsInDay["1"], this.props.recordsInDay["2"], this.props.recordsInDay["3"], this.props.recordsInDay["4"])
         }
         const date = new Date(
-            new Date().getFullYear()
+            this.props.selectedDate.split('-')[0]
             + '-' +
-            `${this.props.selectedMonth.toString().length === 1 ? '0' + this.props.selectedMonth.toString() : this.props.selectedMonth}` +
+            `${this.props.selectedDate.split('-')[1].length === 1 ? '0' + this.props.selectedDate.split('-')[1] : this.props.selectedDate.split('-')[1]}` +
             '-' +
             `${this.props.dayNumber.toString().length === 1 ? '0' + this.props.dayNumber.toString() : this.props.dayNumber}`
         );
@@ -50,14 +50,15 @@ export default class DayListComponent extends React.Component<DayListComponentPr
                   style={{marginTop: '1rem'}}>
                 <Chip style={{marginLeft: '2rem', width: '200px'}} variant="outlined" color="primary" label={
                     <Typography variant={"h6"}>
-                        {this.props.dayNumber}.{this.props.selectedMonth} {getWeekDay(date)}
+                        {this.props.dayNumber}.{this.props.selectedDate.split('-')[1]} {getWeekDay(date)}
                     </Typography>}
                 />
                 {dayListItemData.map(data => {
                     return (
                         <DayListItem
+                            year={this.props.selectedDate.split('-')[0]}
                             updateRecords={this.props.updateRecords}
-                            month={this.props.selectedMonth}
+                            month={this.props.selectedDate.split('-')[1]}
                             dayNumber={this.props.dayNumber}
                             number={dayListItemData.indexOf(data) + 1}
                             key={Math.random()}
@@ -69,17 +70,19 @@ export default class DayListComponent extends React.Component<DayListComponentPr
                 })}
             </Grid>
         )
+        return null
     }
 }
 
 interface DayListItemProps {
+    year: string
     time: string
     comment: string
     cost: number
     dayNumber: number
     number: number
     updateRecords: (items: any) => void
-    month: number
+    month: string
 }
 
 interface DayListItemState {
@@ -106,7 +109,7 @@ class DayListItem extends React.Component <DayListItemProps, DayListItemState> {
     }
 
     public handleUpdateRecord = () => {
-        http.updateRecord(new Date().getFullYear().toString(), this.props.month, this.props.dayNumber, this.props.number, this.state.time, this.state.comment, this.state.cost)
+        http.updateRecord(this.props.year, this.props.month, this.props.dayNumber, this.props.number, this.state.time, this.state.comment, this.state.cost)
             .then(res => res.json())
             .then(
                 (result) => {

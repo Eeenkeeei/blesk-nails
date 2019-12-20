@@ -31,7 +31,7 @@ export default class Statistic extends React.Component <StatisticProps, Statisti
 
     public uploadRecordsInMonthByMonthNumber = async (monthNumber: number) => {
         return new Promise (((resolve, reject) => {
-            http.getRecordsByDate(new Date().getFullYear().toString(), monthNumber)
+            http.getRecordsByDate(new Date().getFullYear().toString(), monthNumber.toString())
                 .then(res => res.json())
                 .then(
                     (result) => {
