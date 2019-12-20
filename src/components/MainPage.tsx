@@ -18,6 +18,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Statistic from "./Statistic";
 import {LoginPage} from "./LoginPage";
 import {ChangePassPage} from "./ChangePassPage";
+import AcUnitIcon from '@material-ui/icons/AcUnit';
 
 const drawerWidth = 240;
 
@@ -113,6 +114,20 @@ export const MainPage = () => {
                                         Ноготочки
                                     </Typography>
                                     &nbsp;&nbsp;
+                                    <Typography style={{color: '#cd4144'}}>
+                                        H
+
+                                    </Typography>
+                                    <Typography style={{color: 'white'}}>
+                                        N
+
+                                    </Typography>
+                                    <Typography style={{color: '#cd2166'}}>
+                                    Y!
+                                </Typography>
+                                    <Typography style={{color: '#cd4144'}}>
+                                        <AcUnitIcon style={{height: '1.2rem'}}/>
+                                    </Typography>
                                     <Typography variant="h6" noWrap
                                                 style={{marginLeft: 'auto', fontSize: '1.2rem'}}>
                                         {new Date().toLocaleDateString('ru')}
