@@ -15,6 +15,8 @@ import DayListComponent from "./DayListComponent";
 import Http from "../storage/http";
 import {RecordsInDay} from "../common/interfaces";
 import {LocalStorage} from "../storage/localStorage";
+import ListSubheader from "@material-ui/core/ListSubheader";
+
 const http = new Http();
 const localStorage = new LocalStorage();
 const moment = require('moment');
@@ -129,9 +131,11 @@ export default class Timetable extends React.Component<TimetableProps, Timetable
                             onChange={(evt) => this.handleChangeMonth(evt)}
                             style={{width: '300px'}}
                         >
+                            <ListSubheader onClick={(evt)=>evt.preventDefault()}>2019</ListSubheader>
                             <MenuItem value={"2019-10"}>Октябрь</MenuItem>
                             <MenuItem value={"2019-11"}>Ноябрь</MenuItem>
                             <MenuItem value={"2019-12"}>Декабрь</MenuItem>
+                            <ListSubheader>2020</ListSubheader>
                             <MenuItem value={"2020-01"}>Январь</MenuItem>
                             <MenuItem value={"2020-02"}>Февраль</MenuItem>
                             <MenuItem value={"2020-03"}>Март</MenuItem>
@@ -145,15 +149,19 @@ export default class Timetable extends React.Component<TimetableProps, Timetable
                             onChange={(evt) => this.handleChangeMonth(evt)}
                             style={{width: '320px'}}
                         >
-                            <MenuItem value={"2019-10"}>Октябрь</MenuItem>
-                            <MenuItem value={"2019-11"}>Ноябрь</MenuItem>
-                            <MenuItem value={"2019-12"}>Декабрь</MenuItem>
-                            <MenuItem value={"2020-01"}>Январь</MenuItem>
-                            <MenuItem value={"2020-02"}>Февраль</MenuItem>
-                            <MenuItem value={"2020-03"}>Март</MenuItem>
-                            <MenuItem value={"2020-04"}>Апрель</MenuItem>
-                            <MenuItem value={"2020-05"}>Май</MenuItem>
-                            <MenuItem value={"2020-06"}>Июнь</MenuItem>
+                            <optgroup label="2019">
+                                <option value={"2019-10"}>Октябрь</option>
+                                <option value={"2019-11"}>Ноябрь</option>
+                                <option value={"2019-12"}>Декабрь</option>
+                            </optgroup>
+                            <optgroup label="2020">
+                                <option value={"2020-01"}>Январь</option>
+                                <option value={"2020-02"}>Февраль</option>
+                                <option value={"2020-03"}>Март</option>
+                                <option value={"2020-04"}>Апрель</option>
+                                <option value={"2020-05"}>Май</option>
+                                <option value={"2020-06"}>Июнь</option>
+                            </optgroup>
                         </NativeSelect> : null}
                     </FormControl>
                 </Paper>
