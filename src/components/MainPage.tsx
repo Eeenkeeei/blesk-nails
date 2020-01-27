@@ -18,7 +18,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Statistic from "./Statistic";
 import {LoginPage} from "./LoginPage";
 import {ChangePassPage} from "./ChangePassPage";
-import AcUnitIcon from '@material-ui/icons/AcUnit';
 
 const drawerWidth = 240;
 
