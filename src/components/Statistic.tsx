@@ -16,7 +16,10 @@ interface StatisticState {
     loading: boolean,
     october: RecordsInDay[],
     november: RecordsInDay[],
-    december: RecordsInDay[]
+    december: RecordsInDay[],
+    jan: RecordsInDay[],
+    feb: RecordsInDay[],
+    mar: RecordsInDay[],
 }
 
 export default class Statistic extends React.Component <StatisticProps, StatisticState> {
@@ -26,12 +29,15 @@ export default class Statistic extends React.Component <StatisticProps, Statisti
         loading: true,
         october: [],
         november: [],
-        december: []
+        december: [],
+        jan: [],
+        feb: [],
+        mar: [],
     };
 
-    public uploadRecordsInMonthByMonthNumber = async (monthNumber: number) => {
+    public uploadRecordsInMonthByMonthNumber = async (year: string, monthNumber: string) => {
         return new Promise (((resolve, reject) => {
-            http.getRecordsByDate(new Date().getFullYear().toString(), monthNumber.toString())
+            http.getRecordsByDate(year, monthNumber)
                 .then(res => res.json())
                 .then(
                     (result) => {
@@ -43,20 +49,32 @@ export default class Statistic extends React.Component <StatisticProps, Statisti
 
     public uploadRecords = () => {
         const uploadOctober = new Promise ((resolve, reject) => {
-            resolve(this.uploadRecordsInMonthByMonthNumber(10))
+            resolve(this.uploadRecordsInMonthByMonthNumber('2019', '10'))
         });
         const uploadNovember = new Promise ((resolve, reject) => {
-            resolve(this.uploadRecordsInMonthByMonthNumber(11))
+            resolve(this.uploadRecordsInMonthByMonthNumber('2019', '11'))
         });
         const uploadDecember = new Promise ((resolve, reject) => {
-            resolve(this.uploadRecordsInMonthByMonthNumber(12))
+            resolve(this.uploadRecordsInMonthByMonthNumber('2019', '12'))
         });
-        Promise.all([uploadOctober, uploadNovember, uploadDecember]).then(values => {
+        const uploadJanuary= new Promise ((resolve, reject) => {
+            resolve(this.uploadRecordsInMonthByMonthNumber('2020', '01'))
+        });
+        const uploadFebruary = new Promise ((resolve, reject) => {
+            resolve(this.uploadRecordsInMonthByMonthNumber('2020', '02'))
+        });
+        const uploadMarch= new Promise ((resolve, reject) => {
+            resolve(this.uploadRecordsInMonthByMonthNumber('2020', '03'))
+        });
+        Promise.all([uploadOctober, uploadNovember, uploadDecember, uploadJanuary, uploadFebruary, uploadMarch]).then(values => {
             this.setState({
                 loading: false,
                 october: values[0] as any,
                 november: values[1] as any,
-                december: values[2] as any
+                december: values[2] as any,
+                jan: values[3] as any,
+                feb: values[4] as any,
+                mar: values[5] as any
             })
         });
     };
@@ -79,11 +97,17 @@ export default class Statistic extends React.Component <StatisticProps, Statisti
         const recordsInOctober: RecordsInDay[] = []; // массив дней с записями в выбранном месяце
         const recordsInNovember: RecordsInDay[] = []; // массив дней с записями в выбранном месяце
         const recordsInDecember: RecordsInDay[] = []; // массив дней с записями в выбранном месяце
+        const recordsInJan: RecordsInDay[] = []; // массив дней с записями в выбранном месяце
+        const recordsInFeb: RecordsInDay[] = []; // массив дней с записями в выбранном месяце
+        const recordsInMar: RecordsInDay[] = []; // массив дней с записями в выбранном месяце
 
         const labelsForGraphic: number[] = [];
         let totalOctoberSum = 0;
         let totalNovemberSum = 0;
         let totalDecemberSum = 0;
+        let totalJanSum = 0;
+        let totalFebSum = 0;
+        let totalMarSum = 0;
 
         recordsInOctober.forEach(data => {
             if (data !== undefined) {
@@ -94,6 +118,9 @@ export default class Statistic extends React.Component <StatisticProps, Statisti
         let octoberData: number[] = [];
         let novemberData: number[] = [];
         let decemberData: number[] = [];
+        let janData: number[] = [];
+        let febData: number[] = [];
+        let marData: number[] = [];
 
         const daysInMonth = 31;
         let startNumber = 1;
@@ -102,6 +129,10 @@ export default class Statistic extends React.Component <StatisticProps, Statisti
             recordsInOctober.push(this.state.october[startNumber]);
             recordsInNovember.push(this.state.november[startNumber]);
             recordsInDecember.push(this.state.december[startNumber]);
+            recordsInJan.push(this.state.jan[startNumber]);
+            recordsInFeb.push(this.state.feb[startNumber]);
+            recordsInMar.push(this.state.mar[startNumber]);
+
             labelsForGraphic.push(startNumber);
             startNumber++
         }
@@ -126,7 +157,25 @@ export default class Statistic extends React.Component <StatisticProps, Statisti
                 totalDecemberSum += data["1"].cost + data["2"].cost + data["3"].cost + data["4"].cost
             }
         });
-        console.log();
+        recordsInJan.forEach(data => {
+            if (data !== undefined) {
+                janData.push(data["1"].cost + data["2"].cost + data["3"].cost + data["4"].cost);
+                totalJanSum += data["1"].cost + data["2"].cost + data["3"].cost + data["4"].cost
+            }
+        });
+        recordsInFeb.forEach(data => {
+            if (data !== undefined) {
+                febData.push(data["1"].cost + data["2"].cost + data["3"].cost + data["4"].cost);
+                totalFebSum += data["1"].cost + data["2"].cost + data["3"].cost + data["4"].cost
+            }
+        });
+        recordsInMar.forEach(data => {
+            if (data !== undefined) {
+                marData.push(data["1"].cost + data["2"].cost + data["3"].cost + data["4"].cost);
+                totalMarSum += data["1"].cost + data["2"].cost + data["3"].cost + data["4"].cost
+            }
+        });
+
         const data = {
             labels: labelsForGraphic,
             datasets: [
@@ -150,6 +199,27 @@ export default class Statistic extends React.Component <StatisticProps, Statisti
                     'rgb(72,89,192)',
                     'rgb(74,84,192)',
                     'rgb(81,111,192)',
+                    'rgba(220,220,220,1)'),
+                new NewStatisticGraphic(`Январь ${totalJanSum}`,
+                    janData,
+                    'rgba(99,206,255,0.98)',
+                    'rgb(122,192,29)',
+                    'rgb(107,192,61)',
+                    'rgb(79,192,64)',
+                    'rgba(220,220,220,1)'),
+                new NewStatisticGraphic(`Февраль ${totalFebSum}`,
+                    febData,
+                    'rgba(99,206,255,0.98)',
+                    'rgb(33,192,186)',
+                    'rgb(53,192,129)',
+                    'rgb(63,181,192)',
+                    'rgba(220,220,220,1)'),
+                new NewStatisticGraphic(`Март ${totalMarSum}`,
+                    marData,
+                    'rgba(99,206,255,0.98)',
+                    'rgb(122,192,29)',
+                    'rgb(107,192,61)',
+                    'rgb(79,192,64)',
                     'rgba(220,220,220,1)'),
             ]
         };
