@@ -113,21 +113,6 @@ export const MainPage = () => {
                                     <Typography variant="h6" noWrap style={{fontSize: '1.2rem'}}>
                                         Ноготочки
                                     </Typography>
-                                    &nbsp;&nbsp;
-                                    <Typography style={{color: '#cd4144'}}>
-                                        H
-
-                                    </Typography>
-                                    <Typography style={{color: 'white'}}>
-                                        N
-
-                                    </Typography>
-                                    <Typography style={{color: '#cd2166'}}>
-                                    Y!
-                                </Typography>
-                                    <Typography style={{color: '#cd4144'}}>
-                                        <AcUnitIcon style={{height: '1.2rem'}}/>
-                                    </Typography>
                                     <Typography variant="h6" noWrap
                                                 style={{marginLeft: 'auto', fontSize: '1.2rem'}}>
                                         {new Date().toLocaleDateString('ru')}
@@ -196,7 +181,6 @@ export const MainPage = () => {
                                         <Redirect to="/blesk-nails"/>
                                     </div>
                                 </Container>
-
                             </main>
                         </div>
                     </MuiThemeProvider>

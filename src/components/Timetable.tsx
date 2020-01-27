@@ -91,14 +91,7 @@ export default class Timetable extends React.Component<TimetableProps, Timetable
     }
 
     public render() {
-        const daysInMonth = 33 - new Date(
-            new Date(
-                Number(this.state.selectedDate.split('-')[0]), Number(this.state.selectedDate.split('-')[1])
-            ).getFullYear(),
-            new Date(
-                Number(this.state.selectedDate.split('-')[0]), Number(this.state.selectedDate.split('-')[1])
-            ).getMonth(),
-            33).getDate();
+        const daysInMonth = moment(this.state.selectedDate + '-01').daysInMonth()
         let recordsInMonth: RecordsInDay[] = []; // массив дней с записями в выбранном месяце
         let startNumber = 1;
         while (startNumber <= daysInMonth) {
