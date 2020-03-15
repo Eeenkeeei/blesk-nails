@@ -17,7 +17,7 @@ export const ChangePassPage = () => {
             .then(res => res.json())
             .then(result => {
                 if (typeof result === 'string') {
-                    ls.setToken(result)
+                    ls.setToken(result);
                     setSuccess(true)
                 }
             })

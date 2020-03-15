@@ -169,7 +169,7 @@ export const MainPage = () => {
                                 <Container>
                                     <div style={{marginTop: '2rem'}}>
                                         <div>
-                                            <Route exact path={'/blesk-nails'} component={() => <Timetable setConfirmed={setConfirmed}/>}/>
+                                            <Route exact path={'/blesk-nails'} component={() => <Timetable setConfirmed={setConfirmed} isConfirmed={confirmed}/>}/>
                                         </div>
                                         <div>
                                             <Route exact path={'/statistic'} component={Statistic}/>

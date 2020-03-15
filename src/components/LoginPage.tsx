@@ -14,12 +14,12 @@ export const LoginPage = (props: LoginPageProps) => {
     const [error, setError] = useState(false);
     const [connectionError, setConnectionError] = useState(false);
     const submit = (evt: FormEvent<HTMLFormElement>) => {
-        setError(false)
+        setError(false);
         evt.preventDefault();
         http.auth(pass)
             .then(res => res.json())
             .then((result) => {
-                if (typeof result === 'string'){
+                if (typeof result === 'string') {
                     ls.setToken(result);
                     props.setConfirmed(true)
                 } else {
@@ -40,7 +40,8 @@ export const LoginPage = (props: LoginPageProps) => {
                            placeholder="Пароль" type="password"
                            onChange={(evt) => setPass(evt.target.value)}
                 />
-                {connectionError ? <Typography variant="subtitle2" className="LoginPage_Label">Ошибка соединения</Typography> : null}
+                {connectionError ?
+                    <Typography variant="subtitle2" className="LoginPage_Label">Ошибка соединения</Typography> : null}
             </form>
         </div>
     )

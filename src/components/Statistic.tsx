@@ -225,9 +225,7 @@ export default class Statistic extends React.Component <StatisticProps, Statisti
         };
         if (!this.state.loading) {
             return (
-                <div>
-                    <Line data={data} />
-                </div>
+                    <Line data={data} height={350}/>
             )
         } else return <CircularProgress/>
     }

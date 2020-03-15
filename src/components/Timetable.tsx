@@ -11,7 +11,7 @@ import {
     Typography
 } from "@material-ui/core";
 import isMobile from 'ismobilejs';
-import DayListComponent from "./DayListComponent";
+import DayComponent from "./DayComponent";
 import Http from "../storage/http";
 import {RecordsInDay} from "../common/interfaces";
 import {LocalStorage} from "../storage/localStorage";
@@ -29,6 +29,7 @@ interface TimetableState {
 
 interface TimetableProps {
     setConfirmed: (value: boolean) => void
+    isConfirmed: boolean
 }
 
 export default class Timetable extends React.Component<TimetableProps, TimetableState> {
@@ -69,25 +70,29 @@ export default class Timetable extends React.Component<TimetableProps, Timetable
 
     componentDidMount(): void {
         const token = localStorage.getToken();
-        if (token) {
-            http.authToken(token)
-                .then(res => res.json())
-                .then(result => {
-                    if (result) {
-                        this.props.setConfirmed(true)
-                    } else {
-                        this.props.setConfirmed(false)
-                    }
-                })
-        } else {
-            this.props.setConfirmed(false)
+        if (process.env.NODE_ENV !== "development") {
+            if (token) {
+                http.authToken(token)
+                    .then(res => res.json())
+                    .then(result => {
+                        if (result) {
+                            this.props.setConfirmed(true)
+                        } else {
+                            this.props.setConfirmed(false)
+                        }
+                    })
+            } else {
+                this.props.setConfirmed(false)
+            }
         }
         if (localStorage.getData()) {
             this.setState({
                 uploadedRecords: JSON.parse(localStorage.getData() as string)
             });
         }
-        this.downloadRecords();
+        if (this.props.isConfirmed) {
+            this.downloadRecords();
+        }
     }
 
     public render() {
@@ -163,11 +168,11 @@ export default class Timetable extends React.Component<TimetableProps, Timetable
                     {!this.state.uploadedRecords ? <CircularProgress/> : <>
                         {recordsInMonth.map(recordInDay => {
                             return (
-                                <DayListComponent key={Math.random()}
-                                                  dayNumber={recordsInMonth.indexOf(recordInDay) + 1}
-                                                  selectedDate={this.state.selectedDate}
-                                                  recordsInDay={recordInDay}
-                                                  updateRecords={this.updateRecords}
+                                <DayComponent key={Math.random()}
+                                              dayNumber={recordsInMonth.indexOf(recordInDay) + 1}
+                                              selectedDate={this.state.selectedDate}
+                                              recordsInDay={recordInDay}
+                                              updateRecords={this.updateRecords}
                                 />
                             )
                         })}
