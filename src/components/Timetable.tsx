@@ -11,11 +11,11 @@ import {
     Typography
 } from "@material-ui/core";
 import isMobile from 'ismobilejs';
-import DayComponent from "./DayComponent";
 import Http from "../storage/http";
 import {RecordsInDay} from "../common/interfaces";
 import {LocalStorage} from "../storage/localStorage";
 import ListSubheader from "@material-ui/core/ListSubheader";
+import {DayComponent} from "./DayComponent";
 
 const http = new Http();
 const localStorage = new LocalStorage();
@@ -164,7 +164,7 @@ export default class Timetable extends React.Component<TimetableProps, Timetable
                     </FormControl>
                 </Paper>
 
-                <Paper style={{marginTop: '1rem'}}>
+                <div style={{marginTop: '1rem'}}>
                     {!this.state.uploadedRecords ? <CircularProgress/> : <>
                         {recordsInMonth.map(recordInDay => {
                             return (
@@ -177,7 +177,7 @@ export default class Timetable extends React.Component<TimetableProps, Timetable
                             )
                         })}
                     </>}
-                </Paper>
+                </div>
             </Grid>
         )
     }

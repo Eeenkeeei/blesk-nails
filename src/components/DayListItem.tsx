@@ -133,21 +133,26 @@ export class DayListItem extends React.Component <DayListItemProps, DayListItemS
                   direction="row"
                   justify="flex-start"
                   alignItems="center"
-                  style={{height: '5rem', borderBottom: '1px solid #e0e0e0'}}
+                  style={{borderTop: '1px solid #e0e0e0'}}
                   className="border"
             >
-                <Grid className="border itemGrid" item xs={3} sm={1} onClick={handleChangeInputTime}>
+                <Grid className="border itemGrid" item xs={3} sm={1} style={{paddingLeft: 5}}
+                      onClick={handleChangeInputTime}>
                     {this.state.inputTime ? timeForm :
-                        <div style={{display: 'inline-flex'}}>
-                            <span className="dayText">{this.state.time}</span>
+                        <div style={{display: 'flex'}}>
+                            <span className="dayText" style={{marginTop: 5}}>{this.state.time}</span>
                             <GetIconByComment/>
                         </div>
                     }
-
                 </Grid>
 
-                <Grid className="border itemGrid" item xs={6} sm={8} onClick={handleChangeInputComment}>
-                    {this.state.inputComment ? commentForm : <span className="dayText">{this.state.comment}</span>
+                <Grid className="border itemGrid" item xs={6} sm={8} onClick={handleChangeInputComment} style={{
+
+                }}>
+                    {this.state.inputComment ? commentForm :
+                        <span className="dayText">
+                        {this.state.comment.replace('inst', '').replace('vk', '').replace('whats', '')}
+                    </span>
                     }
                 </Grid>
                 {this.state.cost === 0 ?

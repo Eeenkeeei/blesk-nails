@@ -7,21 +7,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
 .border {
   /*border: 1px solid black*/
 }
 
 .itemGrid {
-  height: 2rem
+  /*height: 35px;*/
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .dayText {
-  font-size: 1.2rem;
+  font-size: 18px;
 }
 
 .dayTimeText {
@@ -29,9 +27,9 @@ code {
 }
 
 .icon {
-  height: 40px !important;
-  width: 40px !important;
-  margin-bottom: 10px !important;
+  height: 30px !important;
+  width: 30px !important;
+  margin-left: 2px !important;
 }
 
 .instagramIcon {
@@ -86,4 +84,14 @@ code {
 
 .LoginPage_Input {
   width: 250px;
+}
+
+.DayComponentContainer {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
 }
