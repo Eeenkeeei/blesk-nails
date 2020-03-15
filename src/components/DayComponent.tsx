@@ -37,7 +37,7 @@ export const DayComponent = (props: DayListComponentProps) => {
 
     return (
         <div className="DayComponentContainer" key={props.dayNumber}>
-            <Chip style={{width: '90%', margin: 'auto', marginTop: 20, marginBottom: 20}} variant="outlined" color="primary" label={
+            <Chip style={{width: '95%', margin: 'auto', marginTop: 20, marginBottom: 20}} variant="outlined" color="primary" label={
                 <Typography variant={"h6"}>
                     {props.dayNumber}.{props.selectedDate.split('-')[1]}, {getWeekDay(date)}.
                      &nbsp; {dayMoneySum > 0 ? `Всего: ${dayMoneySum}` : null}
