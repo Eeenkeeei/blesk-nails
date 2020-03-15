@@ -163,8 +163,8 @@ export class DayListItem extends React.Component <DayListItemProps, DayListItemS
                         {this.state.inputCost ? inputCost : <span className="dayText">{this.state.cost}</span>}
                     </Grid>}
 
-                <Grid item xs={1} sm={1} className="border">
-                    <IconButton onClick={() => this.handleUpdateRecord()}>
+                <Grid item xs={1} sm={1} className="border" style={{width: 36, maxWidth: 36, marginLeft: 'auto'}}>
+                    <IconButton style={{paddingLeft: 0}} onClick={() => this.handleUpdateRecord()}>
                         <Sync/>
                     </IconButton>
                 </Grid>

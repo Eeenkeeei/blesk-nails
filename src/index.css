@@ -16,10 +16,12 @@ body {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  min-height: 20px;
 }
 
 .dayText {
   font-size: 18px;
+
 }
 
 .dayTimeText {
